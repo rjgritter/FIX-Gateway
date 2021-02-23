@@ -11,7 +11,9 @@ database file: "{CONFIG}/database.yaml"
 # file listed will overwrite data in previous files
 # Plugins may overwrite this data as well.
 initialization files:
-  - "{CONFIG}/default.ini"
+  # - "{CONFIG}/default.ini"
+  - "{CONFIG}/dummy.ini"
+
 
 # Connections:
 # if 'load' is 'yes' the connection plugin will be loaded at program start

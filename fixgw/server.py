@@ -34,7 +34,7 @@ import fixgw.database as database
 import fixgw.status as status
 import fixgw.plugin as plugin
 
-config_filename = "default.yaml"
+config_filename = "demo.yaml"
 user_home = os.path.expanduser("~")
 prefix_path = sys.prefix
 path_options = ['{USER}/.makerplane/fixgw/config',

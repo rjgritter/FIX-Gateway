@@ -35,23 +35,51 @@ class MainThread(threading.Thread):
         self.parent = parent  # parent plugin object
         self.log = parent.log  # simplifies logging
         self.keylist = {"ROLL":3, "PITCH":0, "IAS":113, "ALT":4220,
-                        "TACH1":2450, "MAP1":24.2, "FUELP1":28.5, "OILP1":56.4,
-                        "OILT1":95, "FUELQ1":11.2, "FUELQ2":19.8, "OAT": 32,
+                        "TACH1":3000, "MAP1":30.0, "FUELP1":28.5, "OILP1":125.0,
+                        "OILT1":100, "FUELQ1":11.2, "FUELQ2":19.8, "OAT": 32,
                         "CHT11":201,"CHT12":202,"CHT13":199,"CHT14":200,
                         "EGT11":710,"EGT12":700,"EGT13":704,"EGT14":702,
                         "FUELF1":8.7,"VOLT":13.7,"CURRNT":45.6
                         }
+        # self.keylist = {"TACH1":2450}
         # Initialize the points
         for each in self.keylist:
             self.parent.db_write(each, self.keylist[each])
 
     def run(self):
+        counter = 0
+        increasing = True
+
         while not self.getout:
-            time.sleep(0.1)
+            time.sleep(0.03)
             # We just read the point and write it back in to reset the TOL timer
             for each in self.keylist:
-                x = self.parent.db_read(each)
+                # x = self.parent.db_read(each)
+                # self.parent.db_write(each, x)
+
+                min = 0
+                max = self.keylist[each]
+                range = max - min
+                x = min + (range * counter / 100)
                 self.parent.db_write(each, x)
+                
+            # min = 0
+            # max = 3000
+            # range = max - min
+            # x = min + (range * counter / 100)
+
+            # key = {"TACH1":x}
+            # self.parent.db_write("TACH1", x)
+
+            if increasing:
+                counter += 1
+                if counter >= 100:
+                    increasing = False
+            else:
+                counter -= 1
+                if counter <= 0:
+                    increasing = True
+
 
         self.running = False
 
